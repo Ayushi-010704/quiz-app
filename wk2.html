@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 2 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90AEAD;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background-color: #333;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Which of these is not a pillar of sustainability?",
+        options: ["environmental sustainability", "economic sustainability", "trans-boundary sustainability", "social sustainability"],
+        answer: "trans-boundary sustainability"
+      },
+      {
+        question: "The Trinity explosion of 1945 is taken as the beginning of the",
+        options: ["Holocene", "Cenocene", "Anthropocene", "Eocene"],
+        answer: "Anthropocene"
+      },
+      {
+        question: "According to Malthusian model,",
+        options: [
+          "Population grows in geometric progression, food supply increases in arithmetic progression",
+          "Population grows in geometric progression, food supply increases in geometric progression",
+          "Population grows in arithmetic progression, food supply increases in arithmetic progression",
+          "Population grows in arithmetic progression, food supply increases in geometric progression"
+        ],
+        answer: "Population grows in geometric progression, food supply increases in arithmetic progression"
+      },
+      {
+        question: "The demographic transition sees a society move from",
+        options: [
+          "high birth rate, low death rate to low birth rate, high death rate",
+          "low birth rate, high death rate to low birth rate, low death rate",
+          "high birth rate, high death rate to low birth rate, low death rate",
+          "high birth rate, high death rate to low birth rate, high death rate"
+        ],
+        answer: "high birth rate, high death rate to low birth rate, low death rate"
+      },
+      {
+        question: "Which of these is a pillar of sustainability?",
+        options: ["social sustainability", "industrial sustainability", "agricultural sustainability", "trans-boundary sustainability"],
+        answer: "social sustainability"
+      },
+      {
+        question: "Which of these is a preventive check according to Malthus?",
+        options: ["foresight", "vice", "misery", "flood"],
+        answer: "foresight"
+      },
+      {
+        question: "The quantum of human impacts can be written as",
+        options: ["I = P + A + T", "I = P X A + T", "I = P X A X T", "I = P + A X T"],
+        answer: "I = P X A X T"
+      },
+      {
+        question: "The book \"An Essay on the Principle of Population\" was written by",
+        options: ["Darwin", "Malthus", "Spencer", "Owens"],
+        answer: "Malthus"
+      },
+      {
+        question: "The logistic growth equation curve is",
+        options: ["I-shaped", "J-shaped", "S-shaped", "U-shaped"],
+        answer: "S-shaped"
+      },
+      {
+        question: "Which of these is a positive check according to Malthus?",
+        options: ["late marriage", "war", "celibacy", "moral restraint"],
+        answer: "war"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 2 Quiz!</p>
+        <a href="index.html" style="text-decoration:none;"><button>Go Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

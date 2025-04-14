@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 3 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90aead;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background: #343a40;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "___ is used to identify which potential impacts are relevant to assess.",
+        options: ["scoping", "screening", "reporting", "review"],
+        answer: "scoping"
+      },
+      {
+        question: "The potential or capacity of a material to have adverse effects on living organisms is",
+        options: ["vulnerability", "susceptibility", "sustainability", "toxicity"],
+        answer: "toxicity"
+      },
+      {
+        question: "A deciduous forest in Madhya Pradesh was converted to a mine. After the mining operations were over, the pits were filled up with soil and species of deciduous forest planted again. This is an example of",
+        options: ["recovery", "restoration", "enhancement", "replacement"],
+        answer: "restoration"
+      },
+      {
+        question: "Hydrocarbons derived from incomplete burning of mineral oils are",
+        options: ["petrogenic hydrocarbons", "pyrogenic hydrocarbons", "biogenic hydrocarbons", "chemonic hydrocarbons"],
+        answer: "pyrogenic hydrocarbons"
+      },
+      {
+        question: "A deciduous forest was mined. After mining, pits were filled and a lake created. It is now visited by migratory birds. This is an example of",
+        options: ["recovery", "restoration", "enhancement", "replacement"],
+        answer: "replacement"
+      },
+      {
+        question: "The relative effect of exposure is",
+        options: ["vulnerability", "sensitivity", "sustainability", "toxicity"],
+        answer: "sensitivity"
+      },
+      {
+        question: "___ determines which projects or developments require a full or partial impact assessment study.",
+        options: ["scoping", "screening", "reporting", "review"],
+        answer: "screening"
+      },
+      {
+        question: "The extent to which a chemical is available for uptake into an organism is",
+        options: ["bioavailability", "bioaccumulation", "bioamplification", "bioresponse"],
+        answer: "bioavailability"
+      },
+      {
+        question: "Hydrocarbons derived from biological processes acting on mineral oils are",
+        options: ["petrogenic hydrocarbons", "pyrogenic hydrocarbons", "biogenic hydrocarbons", "chemonic hydrocarbons"],
+        answer: "biogenic hydrocarbons"
+      },
+      {
+        question: "An action that increases vulnerability to climate stimuli instead of reducing it is",
+        options: ["adaptation", "mitigation", "maladaptation", "migration"],
+        answer: "maladaptation"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 3 Quiz!</p>
+        <a href="index.html"><button>Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 10 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90aead;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background: #343a40;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "“An absolute level of income set by the government for each family size below which a family is deemed to be in poverty” is known as",
+        options: ["deprivation line", "poverty line", "deprivation index", "poverty index"],
+        answer: "poverty line"
+      },
+      {
+        question: "Absolute poverty depends",
+        options: ["on income but not on access to social services", "not on income but on access to social services", "on income and on access to social services", "neither on income nor on access to social services"],
+        answer: "on income and on access to social services"
+      },
+      {
+        question: "“The equipment and structures used to produce goods and services” is the definition of",
+        options: ["tools", "machinery", "capital", "factors of production"],
+        answer: "capital"
+      },
+      {
+        question: "“Above-equilibrium wages paid by firms to increase worker productivity” are known as",
+        options: ["compensating wage", "efficiency wage", "productivity wage", "retention wage"],
+        answer: "efficiency wage"
+      },
+      {
+        question: "“Government policy aimed at protecting people against the risk of adverse events” is",
+        options: ["Social protection", "Social insurance", "Social security", "Socialism"],
+        answer: "Social insurance"
+      },
+      {
+        question: "“A difference in wages that arises to offset the non-monetary characteristics of different jobs” is known as",
+        options: ["differentiating differential", "compensating differential", "differentiating integral", "compensating integral"],
+        answer: "compensating differential"
+      },
+      {
+        question: "For a competitive and profit-maximising firm,",
+        options: ["each factor’s rental price < the value of the marginal product for that factor", "each factor’s rental price = the value of the marginal product for that factor", "each factor’s rental price > the value of the marginal product for that factor", "each factor’s rental price = the value of the average product for that factor"],
+        answer: "each factor’s rental price = the value of the marginal product for that factor"
+      },
+      {
+        question: "“A condition characterised by severe deprivation of basic human needs, including food, safe drinking water, sanitation facilities, health, shelter, education and information” is known as",
+        options: ["absolute poverty", "relative poverty", "median poverty", "poverty line"],
+        answer: "absolute poverty"
+      },
+      {
+        question: "“A condition where a household’s income is lower than the median income in the particular country” is known as",
+        options: ["absolute poverty", "relative poverty", "median poverty", "poverty line"],
+        answer: "relative poverty"
+      },
+      {
+        question: "“The increase in the amount of output from an additional unit of labor” is",
+        options: ["marginal product of labour", "marginal product of input", "average product of labour", "average product of input"],
+        answer: "marginal product of labour"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 10 Quiz!</p>
+        <a href="index.html"><button>Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

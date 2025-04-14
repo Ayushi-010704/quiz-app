@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 1 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90AEAD;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background-color: #333;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "In the word root for conservation, con stands for",
+        options: ["together", "to keep", "house", "manage"],
+        answer: "together"
+      },
+      {
+        question: "“the ability of a single economic actor to influence market prices” is known as",
+        options: ["price power", "market power", "externality", "economic power"],
+        answer: "market power"
+      },
+      {
+        question: "An economy that allocates resources via decentralized decisions is a",
+        options: ["urban economy", "rural economy", "planned economy", "market economy"],
+        answer: "market economy"
+      },
+      {
+        question: "In the word root for conservation, servare stands for",
+        options: ["together", "to keep", "house", "manage"],
+        answer: "to keep"
+      },
+      {
+        question: "Which of these is true?",
+        options: [
+          "Wants are unlimited, resources are unlimited",
+          "Wants are limited, resources are limited",
+          "Wants are unlimited, resources are limited",
+          "Wants are limited, resources are unlimited"
+        ],
+        answer: "Wants are unlimited, resources are limited"
+      },
+      {
+        question: "“An increase in the overall level of prices in the economy” is",
+        options: ["inflation", "deflation", "stagflation", "priceflation"],
+        answer: "inflation"
+      },
+      {
+        question: "Phillips curve shows the relation between",
+        options: [
+          "profit and loss",
+          "marked price and selling price",
+          "inflation rate and unemployment rate",
+          "electricity consumption and heat output"
+        ],
+        answer: "inflation rate and unemployment rate"
+      },
+      {
+        question: "In the word root for Economics, oikos stands for",
+        options: ["together", "to keep", "house", "manage"],
+        answer: "house"
+      },
+      {
+        question: "Most of rational thinking occurs",
+        options: ["before the margin", "at the margin", "after the margin", "none of these"],
+        answer: "at the margin"
+      },
+      {
+        question: "Input costs that do not require money are",
+        options: ["explicit costs", "implicit costs", "opportunity costs", "phantom costs"],
+        answer: "implicit costs"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 1 Quiz!</p>
+        <a href="index.html" style="text-decoration:none;"><button>Go Back to Home</button></a>
+      `;
+    }
+
+    // Load first question
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 4 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90aead;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background: #343a40;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Which of these is a deterministic factor?",
+        options: ["environmental variation", "forest fire", "death rate", "diseases"],
+        answer: "death rate"
+      },
+      {
+        question: "I tried growing vegetables under my teak plantation, but the vegetable plants died out. I should be concerned about",
+        options: ["autophagy", "allelophagy", "autopathy", "allelopathy"],
+        answer: "allelopathy"
+      },
+      {
+        question: "The movement of lions across the Gir landscape is an example of",
+        options: ["diffusion", "secular dispersal", "jump dispersal", "drifting"],
+        answer: "diffusion"
+      },
+      {
+        question: "The geographical distribution of a species is controlled by the factor with the narrowest range of tolerance. This is",
+        options: [
+          "Liebig’s law of the minimum",
+          "Liebig’s law of the maximum",
+          "Shelford’s law of tolerance",
+          "Shelford’s law of intolerance"
+        ],
+        answer: "Shelford’s law of tolerance"
+      },
+      {
+        question: "The regular, seasonal movement of animals, often along fixed routes is called",
+        options: ["translocation", "migration", "dispersal", "drifting"],
+        answer: "migration"
+      },
+      {
+        question: "Which of these is a stochastic factor?",
+        options: ["birth rate", "death rate", "population structure", "environmental fluctuation"],
+        answer: "environmental fluctuation"
+      },
+      {
+        question: "The movement of individuals to a new area to survive and reproduce is called",
+        options: ["translocation", "migration", "dispersal", "drifting"],
+        answer: "dispersal"
+      },
+      {
+        question: "Scarcity of food is a",
+        options: ["chemical factor", "demographic factor", "push factor", "pull factor"],
+        answer: "push factor"
+      },
+      {
+        question: "Which of these correctly represents the process of habitat fragmentation and loss?",
+        options: [
+          "Original forest → Dissection → Perforation → Fragmentation → Attrition",
+          "Original forest → Dissection → Attrition → Fragmentation → Perforation",
+          "Original forest → Dissection → Perforation → Attrition → Fragmentation",
+          "Original forest → Dissection → Fragmentation → Perforation → Attrition"
+        ],
+        answer: "Original forest → Dissection → Perforation → Fragmentation → Attrition"
+      },
+      {
+        question: "A root zone treatment plant is an example of",
+        options: ["phytoremediation", "biological control", "biomagnification", "bioaccumulation"],
+        answer: "phytoremediation"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 4 Quiz!</p>
+        <a href="index.html"><button>Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

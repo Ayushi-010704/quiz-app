@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 11 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90aead;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background: #343a40;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "“An action taken by an uninformed party to induce an informed party to reveal information” is known as",
+        options: ["signalling", "screening", "informing", "heuristics"],
+        answer: "screening"
+      },
+      {
+        question: "“The part of actual resources that can be developed profitably in the future” are",
+        options: ["potential resources", "actual resources", "reserve resources", "stock resources"],
+        answer: "reserve resources"
+      },
+      {
+        question: "“The limit on the consumption bundles that a consumer can afford” is known as",
+        options: ["consumption constraint", "budget constraint", "bundle constraint", "affordability constraint"],
+        answer: "budget constraint"
+      },
+      {
+        question: "“Mental short cut using emotion (gut feeling) to influence the decision” is",
+        options: ["affect heuristic", "availability heuristic", "effort heuristic", "familiarity heuristic"],
+        answer: "affect heuristic"
+      },
+      {
+        question: "“Those resources that are currently being used after surveying, quantification and qualification” are",
+        options: ["potential resources", "actual resources", "reserve resources", "stock resources"],
+        answer: "actual resources"
+      },
+      {
+        question: "“The change in consumption that results when a price change moves the consumer along a given indifference curve to a point with a new marginal rate of substitution” is known as",
+        options: ["income effect", "substitution effect", "indifference effect", "budget effect"],
+        answer: "substitution effect"
+      },
+      {
+        question: "An inferior good whose demand increases with price is called as",
+        options: ["Normal good", "Veblen good", "Giffen good", "Demand good"],
+        answer: "Giffen good"
+      },
+      {
+        question: "Which of these is not a property of indifference curves?",
+        options: ["Higher indifference curves are preferred to lower ones", "Indifference curves are downward-sloping", "Indifference curves cross at right angles", "Indifference curves are bowed inwards"],
+        answer: "Indifference curves cross at right angles"
+      },
+      {
+        question: "“An action taken by an informed party to reveal private information to an uninformed party” is known as",
+        options: ["signalling", "screening", "informing", "heuristics"],
+        answer: "signalling"
+      },
+      {
+        question: "“Simple strategies or mental processes used to quickly form judgments, make decisions, and find solutions to complex problems” is known as",
+        options: ["signalling", "screening", "informing", "heuristics"],
+        answer: "heuristics"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 11 Quiz!</p>
+        <a href="index.html"><button>Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

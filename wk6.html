@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 6 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #90aead;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background: #343a40;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "“The claim that, other things being equal, the quantity demanded of a good falls when the price of the good rises” is a statement of",
+        options: ["law of demand", "law of supply", "law of quantity demanded", "law of quantity supplied"],
+        answer: "law of demand"
+      },
+      {
+        question: "“A legal maximum on the price at which a good can be sold” is",
+        options: ["price ceiling", "price floor", "selling ceiling", "selling floor"],
+        answer: "price ceiling"
+      },
+      {
+        question: "“A good for which, other things being equal, an increase in income leads to a decrease in demand” is",
+        options: ["normal good", "inferior good", "Giffen good", "common good"],
+        answer: "inferior good"
+      },
+      {
+        question: "“A table that shows the relationship between the price of a good and the quantity supplied” is",
+        options: ["demand table", "demand schedule", "supply table", "supply schedule"],
+        answer: "supply schedule"
+      },
+      {
+        question: "“A graph of the relationship between the price of a good and the quantity demanded” is",
+        options: ["demand curve", "supply curve", "Laffer's curve", "Phillips curve"],
+        answer: "demand curve"
+      },
+      {
+        question: "“A table that shows the relationship between the price of a good and the quantity demanded” is",
+        options: ["demand table", "demand schedule", "supply table", "supply schedule"],
+        answer: "demand schedule"
+      },
+      {
+        question: "“A measure of how much the quantity demanded of one good responds to a change in the price of another good” is",
+        options: [
+          "price elasticity of demand",
+          "income elasticity of demand",
+          "cross-price elasticity of demand",
+          "price elasticity of supply"
+        ],
+        answer: "cross-price elasticity of demand"
+      },
+      {
+        question: "Rice and wheat are",
+        options: ["substitutes", "complements", "club goods", "public goods"],
+        answer: "substitutes"
+      },
+      {
+        question: "“A good for which, other things being equal, an increase in income leads to an increase in demand” is",
+        options: ["normal good", "inferior good", "Giffen good", "common good"],
+        answer: "normal good"
+      },
+      {
+        question: "“A measure of how much the quantity demanded of a good responds to a change in the price of that good” is",
+        options: [
+          "price elasticity of demand",
+          "income elasticity of demand",
+          "cross-price elasticity of demand",
+          "price elasticity of supply"
+        ],
+        answer: "price elasticity of demand"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 6 Quiz!</p>
+        <a href="index.html"><button>Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz App - Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #90AEAD;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    select {
+      font-size: 16px;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #90aead;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to the NPTEL Quiz App</h1>
+    <p>CONSERVATION ECONOMICS</p>
+  </header>
+
+  <div class="container">
+    <label for="weekSelect"><strong>Choose a Week:</strong></label>
+    <select id="weekSelect">
+      <option value="" disabled selected>Select Week</option>
+      <!-- Weeks 1 to 12 -->
+      <option value="wk1">Week 1</option>
+      <option value="wk2">Week 2</option>
+      <option value="wk3">Week 3</option>
+      <option value="wk4">Week 4</option>
+      <option value="wk5">Week 5</option>
+      <option value="wk6">Week 6</option>
+      <option value="wk7">Week 7</option>
+      <option value="wk8">Week 8</option>
+      <option value="wk9">Week 9</option>
+      <option value="wk10">Week 10</option>
+      <option value="wk11">Week 11</option>
+      <option value="wk12">Week 12</option>
+    </select>
+
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <script>
+    function startQuiz() {
+      const week = document.getElementById('weekSelect').value;
+      if (week) {
+        // Redirect to the selected week's quiz page
+        window.location.href = `${week}.html`;
+      } else {
+        alert('Please select a week first.');
+      }
+    }
+  </script>
+
+</body>
+</html>
