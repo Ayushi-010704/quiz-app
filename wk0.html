@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 9 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e9f5db;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options button.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    #nextBtn, #scoreDisplay {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    #scoreDisplay {
+      background: #343a40;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quizContainer">
+      <div class="question" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+      <button id="nextBtn" onclick="loadNextQuestion()">Next</button>
+      <div id="scoreDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "“the ability to produce a good at a lower opportunity cost than another producer” is a definition of",
+        options: ["real advantage", "monetary advantage", "comparative advantage", "opportunity advantage"],
+        answer: "comparative advantage"
+      },
+      {
+        question: "“fluctuations in economic activity, such as employment and production” are referred to as",
+        options: ["business cycles", "economic cycles", "production cycles", "market cycles"],
+        answer: "business cycles"
+      },
+      {
+        question: "The property of society getting the most it can from its scarce resources is a definition of",
+        options: ["efficiency", "equality", "prudence", "sustainability"],
+        answer: "efficiency"
+      },
+      {
+        question: "In the word root for Economics, nemein stands for",
+        options: ["together", "to keep", "house", "manage"],
+        answer: "manage"
+      },
+      {
+        question: "Whatever must be given up to obtain some item is a definition of",
+        options: ["explicit costs", "implicit costs", "opportunity costs", "phantom costs"],
+        answer: "opportunity costs"
+      },
+      {
+        question: "Rational decision making compares",
+        options: [
+          "average benefits to average costs",
+          "average benefits to marginal costs",
+          "marginal benefits to average costs",
+          "marginal benefits to marginal costs"
+        ],
+        answer: "marginal benefits to marginal costs"
+      },
+      {
+        question: "“something that induces a person to act” is a definition of",
+        options: ["enticement", "attraction", "incentive", "occupation"],
+        answer: "incentive"
+      },
+      {
+        question: "Input costs that require an outlay of money are",
+        options: ["explicit costs", "implicit costs", "opportunity costs", "phantom costs"],
+        answer: "explicit costs"
+      },
+      {
+        question: "The property of distributing economic prosperity uniformly among the members of society is a definition of",
+        options: ["efficiency", "equality", "prudence", "sustainability"],
+        answer: "equality"
+      },
+      {
+        question: "“the ability of an individual to own and exercise control over scarce resources” is known as",
+        options: ["property rights", "resource rights", "individual rights", "social rights"],
+        answer: "property rights"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      document.getElementById("questionText").textContent = `${index + 1}. ${q.question}`;
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, option, q.answer);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectAnswer(button, selected, correct) {
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+          if (btn.textContent === correct) {
+            btn.classList.add("correct");
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function loadNextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion(currentQuestion);
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function showFinalScore() {
+      document.getElementById("quizContainer").innerHTML = `
+        <h2>Your Score: ${score}/10</h2>
+        <p>Thanks for completing Week 9 Quiz!</p>
+        <a href="index.html"><button>Back to Home</button></a>
+      `;
+    }
+
+    window.onload = () => {
+      loadQuestion(currentQuestion);
+    };
+  </script>
+</body>
+</html>
